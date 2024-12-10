@@ -1,18 +1,15 @@
 import { Router } from "express";
+import {
+  getTransportOptions,
+  addTransportOption,
+} from "../controllers/transportController";
 
 const router = Router();
 
-// Default route
-router.get("/", (req, res) => {
-  res.json({ message: "Welcome to the Transport Options API!" });
-});
+// Fetch all transport options
+router.get("/options", getTransportOptions);
 
-// Example route to fetch transport options
-router.get("/options", (req, res) => {
-  res.json({
-    message: "Fetching transport options...",
-    data: [],
-  });
-});
+// Add a new transport option
+router.post("/options", addTransportOption);
 
 export default router;
