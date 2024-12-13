@@ -1,15 +1,15 @@
-import { Router } from "express";
+import express from "express";
 import {
-  getTransportOptions,
+  getAllTransportOptions,
   addTransportOption,
 } from "../controllers/transportController";
 
-const router = Router();
+const router = express.Router();
 
-// Fetch all transport options
-router.get("/options", getTransportOptions);
+// Route: GET /api/transport/options
+router.get("/options", getAllTransportOptions);
 
-// Add a new transport option
+// POST a new transport option
 router.post("/options", addTransportOption);
 
 export default router;

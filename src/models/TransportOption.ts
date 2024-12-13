@@ -1,30 +1,14 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Schema, model } from "mongoose";
 
-// Interface for Transport Option
-export interface ITransportOption extends Document {
-  mode: string;
-  carbonEmission: number;
-  cost: number;
-  travelTime: number;
-  description?: string;
-}
-
-// Schema Definition
-const TransportOptionSchema: Schema = new Schema(
+const TransportOptionSchema = new Schema(
   {
-    mode: { type: String, required: true },
-    carbonEmission: { type: Number, required: true },
-    cost: { type: Number, required: true },
-    travelTime: { type: Number, required: true },
-    description: { type: String },
+    name: { type: String, required: true }, // e.g., Bus, Train, Walk
+    cost: { type: Number, required: true }, // e.g., ticket price
+    time: { type: Number, required: true }, // travel time in minutes
+    carbonEmission: { type: Number, required: true }, // emission in kg
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-// Model
-const TransportOption = mongoose.model<ITransportOption>(
-  "TransportOption",
-  TransportOptionSchema
-);
-
+const TransportOption = model("TransportOption", TransportOptionSchema);
 export default TransportOption;

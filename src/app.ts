@@ -1,7 +1,8 @@
-import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import transportRoutes from "./routes/transportRoutes"; // Import routes
+import express, { Request, Response } from "express";
+import transportRoutes from "./routes/transportRoutes";
+import GlobalError from "./controllers/errorcontroller";
 
 dotenv.config();
 
@@ -20,14 +21,20 @@ mongoose
     console.error("MongoDB Connection Error:", err);
   });
 
-// Routes
-app.use("/api/transport", transportRoutes); // Mount transport routes
+// Middleware
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the Transport Emissions API");
+// Root route
+app.get("/", (req: Request, res: Response): void => {
+  res.status(200).json({ message: "Server is running and API is live!" });
 });
+// Routes
+app.use("/api/transport", transportRoutes);
+// Global Error handling
+app.use(GlobalError);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Start the server
+const PORT: number = parseInt(process.env.PORT || "3000", 10);
+app.listen(PORT, (): void => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

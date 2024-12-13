@@ -34,3 +34,67 @@ Before running the project, ensure you have the following installed:
    git clone <repository-url>
    cd <repository-folder>
    ```
+
+### 1. GET `/api/transport/options`
+
+**Description**:  
+This endpoint fetches all available transport options from the database.
+
+**Request:**
+
+- **Method**: `GET`
+- **URL**: `http://localhost:5000/api/transport/options`
+
+**Response:**
+
+- **Success (200)**:  
+  Returns a list of all transport options.
+
+  Example Response:
+
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "name": "Bus",
+        "cost": 10,
+        "time": 30,
+        "carbonEmission": 50
+      },
+      {
+        "name": "Train",
+        "cost": 20,
+        "time": 15,
+        "carbonEmission": 30
+      }
+    ]
+  }
+  ```
+
+### 2. POST `/api/transport/options`
+
+**Description**:  
+This endpoint allows you to add a new transport option to the database.
+
+**Request:**
+
+- **Method**: `POST`
+- **URL**: `http://localhost:5000/api/transport/options`
+- **Body**:
+
+  - `name` (string): Name of the transport option.
+  - `cost` (number): Cost of using this transport option.
+  - `time` (number): Time taken by this transport option.
+  - `carbonEmission` (number): Carbon emission by this transport option.
+
+  Example request body:
+
+  ```json
+  {
+    "name": "Bus",
+    "cost": 10,
+    "time": 30,
+    "carbonEmission": 50
+  }
+  ```
