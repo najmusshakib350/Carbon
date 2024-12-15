@@ -34,7 +34,7 @@ const handleCastErrorDB = (err: ErrorWithStatus): AppError => {
 function developmentError(
   err: ErrorWithStatus,
   req: Request,
-  res: Response
+  res: Response,
 ): void {
   res.status(err.statuscode || 500).json({
     status: err.status || "error",
@@ -47,7 +47,7 @@ function developmentError(
 function productionError(
   err: ErrorWithStatus,
   req: Request,
-  res: Response
+  res: Response,
 ): void {
   if (err.isoperational) {
     res.status(err.statuscode || 500).json({
@@ -66,7 +66,7 @@ export default (
   err: ErrorWithStatus,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   err.statuscode = err.statuscode || 500;
   err.status = err.status || "error";

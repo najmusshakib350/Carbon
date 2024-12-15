@@ -98,3 +98,59 @@ This endpoint allows you to add a new transport option to the database.
     "carbonEmission": 50
   }
   ```
+
+### 3. PATCH `/api/transport/options/:id`
+
+**Description**:  
+Update an existing transport option.
+
+#### Request
+
+- **URL Parameters**: `id` (string, required)
+- **Body (JSON)**:
+  - `name` (string, optional): New name for the transport option.
+  - `cost` (number, optional): Updated cost.
+  - `time` (number, optional): Updated time in minutes.
+  - `carbonEmission` (number, optional): Updated carbon emission value.
+
+#### Response
+
+- **200 OK**: Transport option updated successfully.
+- **400 Bad Request**: No fields provided for update.
+- **404 Not Found**: Transport option with the given ID not found.
+- **500 Internal Server Error**: Unexpected server error.
+
+### 4. DELETE `/api/transport/options/:id`
+
+**Description**:
+Deletes a transport option by its ID.
+
+- **Parameters**:
+  - `:id` (path) - The ID of the transport option to delete.
+- **Responses**:
+  - `200 OK`: The transport option was deleted successfully.
+  - `404 Not Found`: Transport option with the given ID was not found.
+  - `500 Internal Server Error`: Server encountered an error.
+
+### 5. POST `/api/transport/calculate`
+
+**Description**:
+Calculates the total carbon emissions, cost, and time for a combination of transport options.
+
+- **Request Body**:
+  - `transportIds` (array of strings) - IDs of the transport options to calculate.
+- **Responses**:
+  - `200 OK`: Carbon emissions calculated successfully.
+  - `400 Bad Request`: Invalid input (e.g., missing or incorrect transport IDs).
+  - `404 Not Found`: No transport options found for the given IDs.
+  - `500 Internal Server Error`: Server encountered an error.
+
+#### Example
+
+**Request**:
+
+```json
+{
+  "transportIds": ["63f5a9c4b2d7e5e1e9c1a05d", "63f5a9c4b2d7e5e1e9c1a06e"]
+}
+```

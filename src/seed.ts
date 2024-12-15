@@ -4,7 +4,7 @@ import TransportOption from "./models/TransportOption";
 const seedTransportOptions = async () => {
   try {
     await mongoose.connect(
-      process.env.MONGO_URI || "mongodb://localhost:27017/transport-emissions"
+      process.env.MONGO_URI || "mongodb://localhost:27017/transport-emissions",
     );
 
     const options = [
