@@ -154,3 +154,24 @@ Calculates the total carbon emissions, cost, and time for a combination of trans
   "transportIds": ["63f5a9c4b2d7e5e1e9c1a05d", "63f5a9c4b2d7e5e1e9c1a06e"]
 }
 ```
+
+### 6. POST `/api/transport/preferences`
+
+**Description**:
+Suggests the best transport option based on the user's preference (e.g., cost, time, or carbon emission).
+
+- **Request Body**:
+  - preference (string) - The user's preference for selecting the best transport option.
+- **Responses**:
+  - `200 OK`: Suggested transport option based on preference.
+  - `400 Bad Request`: Invalid input (e.g., missing or invalid preference).
+  - `404 Not Found`: No transport options available.
+  - `500 Internal Server Error`: Server encountered an error.
+
+#### Example
+
+**Request**:
+
+```{ "preference": "cost" }
+
+```

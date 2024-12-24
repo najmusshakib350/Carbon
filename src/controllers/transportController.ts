@@ -5,7 +5,7 @@ import AppError from "./../utils/apperror";
 export const getAllTransportOptions = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const options = await TransportOption.find();
@@ -22,7 +22,7 @@ export const getAllTransportOptions = async (
 export const addTransportOption = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { name, cost, time, carbonEmission } = req.body;
@@ -52,7 +52,7 @@ export const addTransportOption = async (
 export const updateTransportOption = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { id } = req.params;
@@ -61,7 +61,7 @@ export const updateTransportOption = async (
     // Validate input
     if (!name && !cost && !time && !carbonEmission) {
       return next(
-        new AppError("Please provide at least one field to update.", 400),
+        new AppError("Please provide at least one field to update.", 400)
       );
     }
 
@@ -69,7 +69,7 @@ export const updateTransportOption = async (
     const updatedOption = await TransportOption.findByIdAndUpdate(
       id,
       req.body,
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     );
 
     if (!updatedOption) {
@@ -90,7 +90,7 @@ export const updateTransportOption = async (
 export const deleteTransportOption = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { id } = req.params;
@@ -115,7 +115,7 @@ export const deleteTransportOption = async (
 export const calculateCarbonEmission = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { transportIds } = req.body;
@@ -123,7 +123,7 @@ export const calculateCarbonEmission = async (
     // Validate input
     if (!Array.isArray(transportIds) || transportIds.length === 0) {
       return next(
-        new AppError("Please provide a valid array of transport IDs.", 400),
+        new AppError("Please provide a valid array of transport IDs.", 400)
       );
     }
 
@@ -134,22 +134,22 @@ export const calculateCarbonEmission = async (
 
     if (transportOptions.length === 0) {
       return next(
-        new AppError("No transport options found for the provided IDs.", 404),
+        new AppError("No transport options found for the provided IDs.", 404)
       );
     }
 
     // Calculate totals
     const totalCarbonEmission = transportOptions.reduce(
       (sum, option) => sum + option.carbonEmission,
-      0,
+      0
     );
     const totalCost = transportOptions.reduce(
       (sum, option) => sum + option.cost,
-      0,
+      0
     );
     const totalTime = transportOptions.reduce(
       (sum, option) => sum + option.time,
-      0,
+      0
     );
 
     res.status(200).json({
@@ -164,6 +164,56 @@ export const calculateCarbonEmission = async (
     });
   } catch (error) {
     console.error("Error calculating carbon emissions:", error);
+    return next(new AppError("Internal Server Error", 500));
+  }
+};
+
+// Suggest the best transport option based on user preferences
+export const suggestTransportOption = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { preference } = req.body;
+
+    // Validate input
+    if (!preference) {
+      return next(
+        new AppError(
+          "Please provide a preference: 'cost', 'time', or 'carbonEmission'",
+          400
+        )
+      );
+    }
+
+    // Validate preference type
+    const validPreferences = ["cost", "time", "carbonEmission"];
+    if (!validPreferences.includes(preference)) {
+      return next(
+        new AppError(
+          "Invalid preference. Choose between 'cost', 'time', or 'carbonEmission'",
+          400
+        )
+      );
+    }
+
+    // Find the best transport option based on preference
+    const bestOption = await TransportOption.find({})
+      .sort({ [preference]: 1 }) // Sort ascending based on preference
+      .limit(1);
+
+    if (!bestOption || bestOption.length === 0) {
+      return next(new AppError("No transport options found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Best transport option based on ${preference}`,
+      data: bestOption[0],
+    });
+  } catch (error) {
+    console.error("Error suggesting transport option:", error);
     return next(new AppError("Internal Server Error", 500));
   }
 };

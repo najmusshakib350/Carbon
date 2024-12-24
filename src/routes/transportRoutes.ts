@@ -5,6 +5,7 @@ import {
   updateTransportOption,
   deleteTransportOption,
   calculateCarbonEmission,
+  suggestTransportOption,
 } from "../controllers/transportController";
 
 const router = express.Router();
@@ -20,5 +21,7 @@ router.patch("/options/:id", updateTransportOption);
 router.delete("/options/:id", deleteTransportOption);
 // POST: Calculate carbon emissions for transport combination
 router.post("/calculate", calculateCarbonEmission);
+// POST: Suggest best transport option
+router.post("/preferences", suggestTransportOption);
 
 export default router;
