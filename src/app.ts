@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import transportRoutes from "./routes/transportRoutes";
 import GlobalError from "./controllers/errorcontroller";
+import cors from "cors";
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ mongoose
     console.error("MongoDB Connection Error:", err);
   });
 
+// Allow all origins
+app.use(cors());
 // Middleware
 app.use(express.json());
 

@@ -175,3 +175,27 @@ Suggests the best transport option based on the user's preference (e.g., cost, t
 ```{ "preference": "cost" }
 
 ```
+
+### 6. POST `/api/transport/integration`
+
+**Description**:
+Fetches and formats transport options for integration with third-party services (e.g., Google Maps).
+
+- **Request Body**:
+  - format (string) - Specifies the desired output format (e.g., "google-maps").
+- **Responses**:
+  - `200 OK`: Transport options successfully formatted.
+  - `400 Bad Request`: Invalid input (e.g., missing or unsupported format).
+  - `404 Not Found`: No transport options available.
+  - `500 Internal Server Error`: Server encountered an error.
+
+#### Example
+
+**Request**:
+
+```{
+  "format": "google-maps"
+}
+
+
+```

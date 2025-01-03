@@ -217,3 +217,49 @@ export const suggestTransportOption = async (
     return next(new AppError("Internal Server Error", 500));
   }
 };
+
+// POST /api/transport/integration
+export const integrateTransportOptions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { format } = req.body;
+
+    // Validate the format
+    if (!format || typeof format !== "string") {
+      return next(new AppError("Invalid format type", 400));
+    }
+
+    // Fetch all transport options
+    const transportOptions = await TransportOption.find();
+
+    if (transportOptions.length === 0) {
+      return next(new AppError("No transport options available.", 404));
+    }
+
+    // Format the response
+    let formattedResponse;
+    if (format === "google-maps") {
+      formattedResponse = transportOptions.map((option) => ({
+        name: option.name,
+        cost: option.cost,
+        time: option.time,
+        carbonEmission: option.carbonEmission,
+      }));
+    } else {
+      return next(new AppError("Unsupported format type.", 400));
+    }
+
+    // Return public data
+    return res.status(200).json({
+      success: true,
+      message: "Integration data formatted successfully.",
+      data: formattedResponse,
+    });
+  } catch (error) {
+    console.error("Error in integrateTransportOptions:", error);
+    return next(new AppError("Internal Server Error", 500));
+  }
+};
